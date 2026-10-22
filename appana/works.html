@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LMS Student Progress</title>
+    <style>
+       .center{text-align: center;} 
+       body{
+    margin-left: 300px;
+margin-right: 300px;
+background-color: rgb(211, 208, 208)
+; border: 4px solid black}
+input{padding: 5px;}
+label{font-size: xx-large;
+color: crimson;}
+button{font-size: xx-large;
+color: brown;
+background-color: black;}
+:hover{color: dodgerblue;}
+
+    </style>
+</head>
+<body class="center">
+
+    <h1 style="color: darkblue; background-color: aliceblue; font-family: Arial, Helvetica, sans-serif;"><u>Student LMS Portal</u></h1>
+
+    <label>Student Name:</label>
+    <input type="text" id="name">
+    <br><br>
+
+    <label>Student ID:</label>
+    <input type="number" id="student id">
+    <br><br>
+
+    <label>Total Questions:</label>
+    <input type="number" id="total">
+    <br><br>
+
+    <label>Completed Questions:</label>
+    <input type="number" id="completed">
+    <br><br>
+
+    <button onclick="calculate()">Calculate Progress</button>
+
+    <h2 id="result"></h2>
+
+    <script>
+
+        function calculate() {
+
+            let total = Number(document.getElementById("total").value);
+            let completed = Number(document.getElementById("completed").value);
+
+            let pending = total - completed;
+
+            let completedPercentage = (completed / total) * 100;
+
+            let incompletePercentage = (pending / total) * 100;
+
+            let progress;
+
+            if (completedPercentage == 100) {
+
+                progress = "Completed";
+
+            } 
+            else if (completedPercentage >= 50) {
+
+                progress = "Good Progress";
+
+            } 
+            else {
+
+                progress = "Incomplete";
+
+            }
+
+            document.getElementById("result").innerHTML =
+                "Total Questions: " + total + "<br>" +
+                "Completed Questions: " + completed + "<br>" +
+                "Pending Questions: " + pending + "<br>" +
+                "Completed Percentage: " + completedPercentage + "%<br>" +
+                "Incomplete Percentage: " + incompletePercentage + "%<br>" +
+                "Overall Progress: " + progress;
+        }
+
+    </script>
+
+</body>
+</html>

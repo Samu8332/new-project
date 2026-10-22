@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student LMS Portal</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f2f5ff;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #273c75;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .input-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            background: #273c75;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #192a56;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            color: #273c75;
+            font-size: 32px;
+            margin-top: 10px;
+        }
+
+        .card p {
+            color: #666;
+            font-weight: bold;
+        }
+
+        .progress-section {
+            margin-top: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        #progressFill {
+            height: 100%;
+            width: 0%;
+            background: #44bd32;
+            text-align: center;
+            color: white;
+            line-height: 30px;
+            transition: 0.5s;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🎓 Student LMS Portal</h1>
+    <p class="subtitle">Student Learning Progress Dashboard</p>
+
+    <!-- INPUT SECTION -->
+    <div class="input-box">
+
+        <label>Total Courses</label>
+        <input type="number" id="courses" placeholder="Enter total courses">
+
+        <label>Total Questions</label>
+        <input type="number" id="totalQuestions" placeholder="Enter total questions">
+
+        <label>Completed Questions</label>
+        <input type="number" id="completedQuestions" placeholder="Enter completed questions">
+
+        <button onclick="calculateProgress()">
+            Calculate Progress
+        </button>
+
+    </div>
+
+
+    <!-- DASHBOARD CARDS -->
+    <div class="cards">
+
+        <div class="card">
+            <p>Total Courses</p>
+            <h2 id="courseResult">0</h2>
+        </div>
+
+        <div class="card">
+            <p>Total Questions</p>
+            <h2 id="totalResult">0</h2>
+        </div>
+
+        <div class="card">
+            <p>Completed Questions</p>
+            <h2 id="completedResult">0</h2>
+        </div>
+
+        <div class="card">
+            <p>Pending Questions</p>
+            <h2 id="pendingResult">0</h2>
+        </div>
+
+    </div>
+
+
+    <!-- PROGRESS -->
+    <div class="progress-section">
+
+        <h2>📊 Learning Progress</h2>
+
+        <p style="margin-top:15px;">
+            Completed Percentage:
+            <strong id="completedPercentage">0%</strong>
+        </p>
+
+        <p style="margin-top:10px;">
+            Incomplete Percentage:
+            <strong id="incompletePercentage">0%</strong>
+        </p>
+
+        <div class="progress-bar">
+            <div id="progressFill">0%</div>
+        </div>
+
+        <div id="status">
+            Start your learning!
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function calculateProgress() {
+
+    // Get values from HTML
+    let courses = Number(document.getElementById("courses").value);
+    let totalQuestions = Number(
+        document.getElementById("totalQuestions").value
+    );
+
+    let completedQuestions = Number(
+        document.getElementById("completedQuestions").value
+    );
+
+
+    // -----------------------------
+    // CONDITIONAL VALIDATION
+    // -----------------------------
+
+    if (courses <= 0) {
+
+        alert("Please enter a valid number of courses.");
+        return;
+
+    }
+
+    else if (totalQuestions <= 0) {
+
+        alert("Please enter a valid number of questions.");
+        return;
+
+    }
+
+    else if (completedQuestions < 0) {
+
+        alert("Completed questions cannot be negative.");
+        return;
+
+    }
+
+    else if (completedQuestions > totalQuestions) {
+
+        alert("Completed questions cannot be greater than total questions.");
+        return;
+
+    }
+
+
+    // -----------------------------
+    // CALCULATE PENDING QUESTIONS
+    // -----------------------------
+
+    let pendingQuestions =
+        totalQuestions - completedQuestions;
+
+
+    // -----------------------------
+    // CALCULATE PERCENTAGES
+    // -----------------------------
+
+    let completedPercentage =
+        (completedQuestions / totalQuestions) * 100;
+
+    let incompletePercentage =
+        (pendingQuestions / totalQuestions) * 100;
+
+
+    // Round percentages
+    completedPercentage =
+        Math.round(completedPercentage);
+
+    incompletePercentage =
+        Math.round(incompletePercentage);
+
+
+    // -----------------------------
+    // DISPLAY RESULTS
+    // -----------------------------
+
+    document.getElementById("courseResult").innerText =
+        courses;
+
+    document.getElementById("totalResult").innerText =
+        totalQuestions;
+
+    document.getElementById("completedResult").innerText =
+        completedQuestions;
+
+    document.getElementById("pendingResult").innerText =
+        pendingQuestions;
+
+    document.getElementById("completedPercentage").innerText =
+        completedPercentage + "%";
+
+    document.getElementById("incompletePercentage").innerText =
+        incompletePercentage + "%";
+
+
+    // -----------------------------
+    // OVERALL PROGRESS
+    // -----------------------------
+
+    document.getElementById("progressFill").style.width =
+        completedPercentage + "%";
+
+    document.getElementById("progressFill").innerText =
+        completedPercentage + "%";
+
+
+    // -----------------------------
+    // CONDITIONAL STATEMENTS
+    // -----------------------------
+
+    let status = document.getElementById("status");
+
+
+    if (completedPercentage == 100) {
+
+        status.innerText =
+            "🏆 Excellent! All questions completed!";
+
+    }
+
+    else if (completedPercentage >= 75) {
+
+        status.innerText =
+            "🌟 Very Good! You are almost finished.";
+
+    }
+
+    else if (completedPercentage >= 50) {
+
+        status.innerText =
+            "👍 Good Progress! Keep learning.";
+
+    }
+
+    else if (completedPercentage > 0) {
+
+        status.innerText =
+            "📚 Keep Going! You have more lessons to complete.";
+
+    }
+
+    else {
+
+        status.innerText =
+            "⏳ Start your learning journey!";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
